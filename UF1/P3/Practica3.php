@@ -10,7 +10,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $dir_subida = 'archivos/P3';
     $fichero = $dir_subida . basename($_FILES["Archivo"]["name"]);
     if (move_uploaded_file($_FILES['Archivo']['tmp_name'],$fichero)){
-        echo "<img src=\"".$fichero."\"> ";
+        echo "<img src=\"".$fichero."\"><br>";
+        echo "<a href=\"",$fichero."\">link del fichero</a>";
     } else{
         echo "ERROR";
     }

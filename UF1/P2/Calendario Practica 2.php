@@ -1,6 +1,6 @@
 <table border="1">
-    <?php
-    //Cadenas de los dias de la semana y meses
+    <?php //El codigo php se podia introducir dentro de un html como tal. pero me ha parecido mejor idea hacerlo asi para entender como funciona php.
+    //Cadenas de los dias de la semana y meses     cxcxc 
     $mes = date("m"); 
     $año = date ("Y");
     $dia = date("d");
