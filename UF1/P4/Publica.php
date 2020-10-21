@@ -2,6 +2,7 @@
 session_start();
 $errorpass="";
 $erroremail="";
+//Funcion para evitar errores con espacios, scripts y comillas.
 function test_input($data) {
     $data = trim($data);
     $data = stripslashes($data);
