@@ -15,14 +15,18 @@ if (isset($_COOKIE["recuerdarcorreo"],$_COOKIE["recordarcontraseña"])){
         setcookie("recordarcontraseña", null, null);
         echo "Error de autenticacion.";
     }
-}elseif ($_SESSION["correo"] != $email || $_SESSION["pass"] != $password){
-    setcookie("recuerdarcorreo", null, null);
-    setcookie("recordarcontraseña", null, null);
-    echo "Error de autenticacion.";
+}elseif (isset($_SESSION["correo"],$_SESSION["pass"])){
+    if ($_SESSION["correo"] != $email || $_SESSION["pass"] != $password){
+        setcookie("recuerdarcorreo", null, null);
+        setcookie("recordarcontraseña", null, null);
+        echo "Error de autenticacion.";
+    } else{   
+        $_SESSION["login"] = 1;
+        Header("Location: Privada.php");
+    }
+}else {
+    Header("Location: Publica.php");
 
-} else{   
-    $_SESSION["login"] = 1;
-    Header("Location: Privada.php");
 
 }
 
