@@ -6,6 +6,5 @@ session_destroy();
 setcookie("recuerdarcorreo", null, null);
 setcookie("recordarcontraseña", null, null);
 Header ("location: Publica.php");
-exit();
-//PREGUNTAR
+//redirecion al login.
 ?>

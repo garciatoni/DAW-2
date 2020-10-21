@@ -9,11 +9,13 @@ function test_input($data) {
     $data = htmlspecialchars($data);
     return $data;
 }
-
+// Si existen las cookies de recordar la sesion, iniciara sesion automaticamente. Solo entrara aqui si previamente se han creado las cookies.
 if (isset($_COOKIE["recuerdarcorreo"],$_COOKIE["recordarcontraseña"])){
     include ("libreria.php");
 
+//Entrara aqui cuando el formulario envie algo.
 }elseif($_SERVER['REQUEST_METHOD'] == 'POST') {
+    //Si la politica de cookies es rechazada enviara al usuario a una web externa, de lo contrario le redireciona al formulario de login y crea la cookie de politica aceptada.
     if (isset($_REQUEST["cookiepolitica"])){
         if ($_REQUEST["cookiepolitica"] == 2){
             Header("Location: https://es.wikipedia.org/wiki/Citrullus_lanatus");
@@ -22,11 +24,13 @@ if (isset($_COOKIE["recuerdarcorreo"],$_COOKIE["recordarcontraseña"])){
             Header("Location: Publica.php");
         }
     }
+    //Creo las cookies si el checkbox "recordar" ha sido marcado.
     if (isset($_REQUEST["recordar"])){
         setcookie("recuerdarcorreo", $_REQUEST["E-mail"],  time() + 365 * 24 * 60 *60);
         setcookie("recordarcontraseña", sha1(md5($_REQUEST["contraseña"])), time() + 365 *24 *60 * 60);
 
     }
+    //Aqui hago la validacion de los campos: contraseña y email. Ademas envio las respuestas a la libreria para comprobar si son correctas.
     if (isset($_REQUEST["E-mail"],$_REQUEST["contraseña"])){
         if (empty($_REQUEST["contraseña"])){
             $errorpass = "Introdue una contraseña.";
@@ -50,7 +54,7 @@ if (isset($_COOKIE["recuerdarcorreo"],$_COOKIE["recordarcontraseña"])){
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
-    <body>
+    <body><!--El formulario del login, solo entrara aqui si la politica de cookies esta aceptada.-->
         <h1 align="center">FORMULARIO</h1>
         <form action="Publica.php" method="post" id="myform" name="myform" align="center">
             <label>E-mail: </label><input type="email" name="E-mail"><span class="error"><?php echo $erroremail;?></span><br><br>
@@ -68,7 +72,7 @@ if (isset($_COOKIE["recuerdarcorreo"],$_COOKIE["recordarcontraseña"])){
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
-    <body>
+    <body><!--La politica de cookies, esta entrara siempre aqui mientras que la cookie "politica" no este aceptada-->
     <form action="Publica.php" method="post" id="myform" name="myform" align="center">
         <p>Quiere aceptar la politica de cookies?</p>
         <label>SI:</label><input type="radio" name="cookiepolitica" value=1 checked="checked"/>
