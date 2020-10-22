@@ -2,6 +2,7 @@
 session_start();
 $errorpass="";
 $erroremail="";
+
 //Funcion para evitar errores con espacios, scripts y comillas.
 function test_input($data) {
     $data = trim($data);
@@ -16,6 +17,7 @@ if (isset($_COOKIE["recuerdarcorreo"],$_COOKIE["recordarcontraseña"])){
 
 //Entrara aqui cuando el formulario envie algo.
 }elseif($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $comprovacionemail= test_input($_REQUEST["E-mail"]);
     //Si la politica de cookies es rechazada enviara al usuario a una web externa, de lo contrario le redireciona al formulario de login y crea la cookie de politica aceptada.
     if (isset($_REQUEST["cookiepolitica"])){
         if ($_REQUEST["cookiepolitica"] == 2){
@@ -39,11 +41,14 @@ if (isset($_COOKIE["recuerdarcorreo"],$_COOKIE["recordarcontraseña"])){
             $errorpass = "La contraseña solo puede contener letras y numeros.";
         } elseif (empty($_REQUEST["E-mail"])){
             $erroremail= "Introdue un correo.";
+        }elseif (!filter_var($comprovacionemail, FILTER_VALIDATE_EMAIL)){//Validacion del email.
+            $erroremail="Formato de email erroneo.";
         }else{
             $_SESSION["correo"] = $_REQUEST["E-mail"];
             $_SESSION["pass"] = $_REQUEST["contraseña"];
             include ("libreria.php");
             Header("Location: Privada.php");
+
         }
     }
 
@@ -59,7 +64,7 @@ if (isset($_COOKIE["recuerdarcorreo"],$_COOKIE["recordarcontraseña"])){
     <body><!--El formulario del login, solo entrara aqui si la politica de cookies esta aceptada.-->
         <h1 align="center">FORMULARIO</h1>
         <form action="Publica.php" method="post" id="myform" name="myform" align="center">
-            <label>E-mail: </label><input type="email" name="E-mail"><span class="error"><?php echo $erroremail;?></span><br><br>
+            <label>E-mail: </label><input type="text" name="E-mail"><span class="error"><?php echo $erroremail;?></span><br><br>
             <label>contraseña: </label><input type="password" name="contraseña"><span class="error"><?php echo $errorpass;?></span><br><br>
             <label>Recordar contraseña: </label><input type="checkbox" name="recordar"/><br>
             <button type="submit">Validar</button><br>
