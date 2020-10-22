@@ -12,6 +12,7 @@ function test_input($data) {
 // Si existen las cookies de recordar la sesion, iniciara sesion automaticamente. Solo entrara aqui si previamente se han creado las cookies.
 if (isset($_COOKIE["recuerdarcorreo"],$_COOKIE["recordarcontraseña"])){
     include ("libreria.php");
+    Header("Location: Privada.php");
 
 //Entrara aqui cuando el formulario envie algo.
 }elseif($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -42,6 +43,7 @@ if (isset($_COOKIE["recuerdarcorreo"],$_COOKIE["recordarcontraseña"])){
             $_SESSION["correo"] = $_REQUEST["E-mail"];
             $_SESSION["pass"] = $_REQUEST["contraseña"];
             include ("libreria.php");
+            Header("Location: Privada.php");
         }
     }
 
