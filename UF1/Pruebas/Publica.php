@@ -3,6 +3,7 @@ session_start();
 $errorpass="";
 $erroremail="";
 include ("LibreriaLogin.php");
+
 //Funcion para evitar errores con espacios, scripts y comillas.
 function test_input($data) {
     $data = trim($data);
@@ -77,7 +78,7 @@ if (isset($_COOKIE["recuerdarcorreo"],$_COOKIE["recordarcontraseña"])){
             <div class="">
                 <input type="checkbox" name="recordar" class="offset-sm-1 mt-3 mb-3">
                 <label class="ml-1">Recuerdame</label>
-                <a href="RecuperarContraseña.php" class="ml-5">He olvidado la contraseña</a>
+                <a href="" class="ml-5">He olvidado la contraseña</a>
             </div>
             <button type="submit" class="offset-sm-1 btn-info">Entrar</button>
             <a class="" href="Registro.php">Registrarse</a>

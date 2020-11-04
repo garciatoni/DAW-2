@@ -29,24 +29,6 @@ function FuncionConexionBD() {
 
 
 
-function FuncionCorreo($token) {
-    $conn = new mysqli('localhost', 'agarcia', 'agarcia', 'agarcia_P5');
-    if ($conn->connect_error) {
-        die("CONEXION CON LA BASE DE DATOS FALLIDA: " . $conn->connect_error);
-    }
-    $sql = "SELECT * FROM usuarios where token='$token'";
-    if (!$resultado = $conn->query($sql)){
-        die("Error ejuctuando la consulta:".$conn->error);
-    }
-    if ($resultado->num_rows > 0){
-        $usuarios = $resultado->fetch_assoc();
-        return $usuarios["correo"];
-    }
-    $resultado->free();
-    $conn->close();   
-}
-
-
 
 
 
@@ -117,30 +99,6 @@ function ModificarUsuarioBD($nombre, $correo, $password, $id){
 }
 
 
-function ModificarPasswordBD($token, $password){
-    $conn = new mysqli('localhost', 'agarcia', 'agarcia', 'agarcia_P5');
-    if ($conn->connect_error) {
-        die("CONEXION CON LA BASE DE DATOS FALLIDA: " . $conn->connect_error);
-    }
-    $sqlcomprobacion = "SELECT * FROM usuarios where token='$token'";
-    if (!$resultado = $conn->query($sqlcomprobacion)){
-        die("Error ejuctuando la consulta:".$conn->error);
-    } 
-    if ($resultado->num_rows > 0){
-        $sql = "UPDATE `usuarios` SET `password` = '$password',`token` = 0 WHERE `token` ='$token'";
-        if (mysqli_query($conn, $sql)) {
-            echo "Los datos se han modificado correctamente!";
-            
-        } else {
-            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-        }
-    }
-    $resultado->free();
-    $conn->close(); 
-}
-
-
-
 
 function InsertarUsuarioBD($nombre, $correo, $password){
     $conn = new mysqli('localhost', 'agarcia', 'agarcia', 'agarcia_P5');
@@ -155,7 +113,7 @@ function InsertarUsuarioBD($nombre, $correo, $password){
     if ($resultado->num_rows > 0){
         echo "Ya existe una cuenta con este usuario...";
     } else{
-        $sql = "INSERT INTO `usuarios` (`id`, `nombre`, `correo`, `password`, `Administrador`, `token`) VALUES (NULL, '$nombre', '$correo', '$password', 0, 0)";
+        $sql = "INSERT INTO `usuarios` (`id`, `nombre`, `correo`, `password`, `Administrador`) VALUES (NULL, '$nombre', '$correo', '$password', 0)";
         if (mysqli_query($conn, $sql)) {
             echo "Se ha registrado correctamente!";
       } else {
@@ -166,7 +124,7 @@ function InsertarUsuarioBD($nombre, $correo, $password){
     $conn->close(); 
 }
 
-//Si existe la cookie "recuerda" llama a la funcion "FuncionComprovacionBD"
+//Si existe la cookie "recuerda#" llama a la funcion "FuncionComprovacionBD"
 function Logging(){
     if (isset($_COOKIE["recuerdarcorreo"],$_COOKIE["recordarcontraseña"])){
         $verificacion=FuncionComprovacionBD($_COOKIE["recuerdarcorreo"],$_COOKIE["recordarcontraseña"]);

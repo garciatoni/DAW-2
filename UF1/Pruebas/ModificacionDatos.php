@@ -1,10 +1,15 @@
 <?php
+session_start();
+include ("control.php");
+include ("LibreriaLogin.php");
+
 $errorpass="";
 $errorpassdos="";
 $erroremail="";
 $errornombre="";
-$creacion = false;
-include ("LibreriaLogin.php");
+$nombre="";
+$email="";
+$id ="";
 //Funcion para evitar errores con espacios, scripts y comillas.
 function test_input($data) {
     $data = trim($data);
@@ -12,6 +17,22 @@ function test_input($data) {
     $data = htmlspecialchars($data);
     return $data;
 }
+
+$conn = new mysqli('localhost', 'agarcia', 'agarcia', 'agarcia_P5');
+if ($conn->connect_error) {
+    die("CONEXION CON LA BASE DE DATOS FALLIDA: " . $conn->connect_error);
+}
+$sql = "SELECT nombre,password,correo,id FROM usuarios where correo='".$_SESSION["login"]."'";
+if (!$resultado = $conn->query($sql)){
+        die("Error ejuctuando la consulta:".$conn->error);
+    }
+if ($resultado->num_rows > 0)
+    while ($usuarios = $resultado->fetch_assoc()){
+        $nombre=$usuarios["nombre"];
+        $email=$usuarios["correo"];
+        $id = $usuarios["id"];
+}
+
 
 
 
@@ -47,9 +68,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         }elseif ($_REQUEST["contraseña"] != $_REQUEST["contraseñados"]){
             $errorpassdos="Las contraseñas deben coincidir";
             $errorpass="Las contraseñas deben coincidir";
-        }else {
-            InsertarUsuarioBD($_REQUEST["nombre"], $_REQUEST["E-mail"], sha1(md5($_REQUEST["contraseña"])));
+        }else{
+            ModificarUsuarioBD($_REQUEST["nombre"], $_REQUEST["E-mail"], sha1(md5($_REQUEST["contraseña"])), $id);
         }
+        
     }
 
 }
@@ -57,24 +79,24 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <html>
     <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-        <title>Registro</title>
+        <title>ModificacionDatos</title>
     </head>
     <body><!--El formulario del login, solo entrara aqui si la politica de cookies esta aceptada.-->
-        <h1 class=" col-sm-1 offset-sm-5 mt-5">REGISTRO</h1>
-        <form action="Registro.php" method="post" id="myform" name="myform">
+        <h1 class=" col-sm-1 offset-sm-4 col-sm-4 mt-5">Modificacion de datos</h1>
+        <form action="ModificacionDatos.php" method="post" id="myform" name="myform">
             <div class="form-inline mt-5">
                 <label for="nombre" class="offset-sm-4 col-sm-1 text-alight-right">Nombre</label>
-                <input type="text" name="nombre" class="form-control col-sm-2" placeholder="Su nombre"><span class="alert m-0 p-0" ><?php echo $errornombre;?></span>
+                <input type="text" name="nombre" class="form-control col-sm-2" placeholder="Su nombre" value=<?php echo $nombre;?>><span class="alert m-0 p-0" ><?php echo $errornombre;?></span>
             </div>            
             <div class="form-inline mt-3">
                 <label for="Email" class="offset-sm-4 col-sm-1 text-alight-right">Email</label>
-                <input type="text" name="E-mail" class="form-control col-sm-2" placeholder="E-mail"><span class="alert m-0 p-0"><?php echo $erroremail;?></span>
+                <input type="text" name="E-mail" class="form-control col-sm-2" placeholder="E-mail" value=<?php echo $email;?>><span class="alert m-0 p-0"><?php echo $erroremail;?></span>
             </div>
             <div class="form-inline mt-3">
                 <label for="Password" class="offset-sm-4 col-sm-1 text-lg-right">Contraseña</label>
@@ -84,9 +106,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label for="Password" class="offset-sm-4 col-sm-1 text-lg-right">Repita la contraseña</label>
                 <input type="password" name="contraseñados" class="form-control col-sm-2" placeholder="Contraseña"><span class="alert m-0 p-0"><?php echo $errorpassdos;?></span>
             </div>
-            <div>
-                <button type="submit" class="offset-sm-5 btn-info mt-3">Registrarse</button>    
-                <a class="ml-1" href="Publica.php">Atras...</a>            
+            <div class="">
+                <button type="submit" class="offset-sm-5 btn-info mt-3">Cambiar</button>  
+                <a href="Privada.php">Atras</a>               
             </div>
 
         </form>
@@ -94,5 +116,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 </html>
 
 <?php
-//}
+$resultado->free();
+$conn->close(); 
 ?>
