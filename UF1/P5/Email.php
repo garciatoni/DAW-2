@@ -29,7 +29,7 @@ try {
     // Content
     $mail->isHTML(true);                                  // Set email format to HTML
     $mail->Subject = 'Correo de recuperacion de cuenta.';
-    $mail->Body    = 'Dale al link si deseas recuperar la contraseña, de lo contrario no respondas al correo <a href="https://dawjavi.insjoaquimmir.cat/agarcia/M07/UF1/P5copia/GeneracionPassword.php?token='.$token.'">Recuperar Password</a>';//MIRAR
+    $mail->Body    = 'Dale al link si deseas recuperar la contraseña, de lo contrario no respondas al correo <a href="https://dawjavi.insjoaquimmir.cat/agarcia/M07/UF1/P5/GeneracionPassword.php?token='.$token.'">Recuperar Password</a>';//MIRAR
     $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
     $mail->send();

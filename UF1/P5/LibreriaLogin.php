@@ -19,7 +19,7 @@ function FuncionComprovacionBD($comprovacioncorreo, $comprovacioncontraseña) {
     $conn->close();   
 }
  
-//
+
 function FuncionConexionBD() {
     $conn = new mysqli('localhost', 'agarcia', 'agarcia', 'agarcia_P5');
     if ($conn->connect_error) {
@@ -98,25 +98,33 @@ function ModificarUsuarioBD($nombre, $correo, $password, $id){
     if ($conn->connect_error) {
         die("CONEXION CON LA BASE DE DATOS FALLIDA: " . $conn->connect_error);
     }
-    $sqlcomprobacion = "SELECT * FROM usuarios where correo='$correo'";
-    if (!$resultado = $conn->query($sqlcomprobacion)){
-        die("Error ejuctuando la consulta:".$conn->error);
-    } 
-    if ($resultado->num_rows > 0){
-        echo "Ya existe una cuenta con este correo...";
-    } else{
+    if ($correo == $_SESSION["login"]){
         $sql = "UPDATE `usuarios` SET `nombre` = '$nombre', `correo` = '$correo', `password` = '$password' WHERE `usuarios`.`id` = $id";
         if (mysqli_query($conn, $sql)) {
             echo "Los datos se han modificado correctamente!";
         } else {
             echo "Error: " . $sql . "<br>" . mysqli_error($conn);
         }
+    }else{
+        $sqlcomprobacion = "SELECT * FROM usuarios where correo='$correo'";
+        if (!$resultado = $conn->query($sqlcomprobacion)){
+            die("Error ejuctuando la consulta:".$conn->error);
+        } 
+        if ($resultado->num_rows > 0){
+            echo "Ya existe una cuenta con este correo...";
+        }else{
+            $sql = "UPDATE `usuarios` SET `nombre` = '$nombre', `correo` = '$correo', `password` = '$password' WHERE `usuarios`.`id` = $id";
+            if (mysqli_query($conn, $sql)) {
+                echo "Los datos se han modificado correctamente!";
+            } else {
+                echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+            }
+        }
     }
-    $resultado->free();
     $conn->close(); 
 }
 
-
+/*
 function ModificarPasswordBD($token, $password){
     $conn = new mysqli('localhost', 'agarcia', 'agarcia', 'agarcia_P5');
     if ($conn->connect_error) {
@@ -138,7 +146,7 @@ function ModificarPasswordBD($token, $password){
     $resultado->free();
     $conn->close(); 
 }
-
+*/
 
 
 
@@ -158,9 +166,9 @@ function InsertarUsuarioBD($nombre, $correo, $password){
         $sql = "INSERT INTO `usuarios` (`id`, `nombre`, `correo`, `password`, `Administrador`, `token`) VALUES (NULL, '$nombre', '$correo', '$password', 0, 0)";
         if (mysqli_query($conn, $sql)) {
             echo "Se ha registrado correctamente!";
-      } else {
+        } else {
             echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-      }
+        }
     }
     $resultado->free();
     $conn->close(); 
