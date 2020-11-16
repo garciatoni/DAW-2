@@ -124,7 +124,7 @@ function ModificarUsuarioBD($nombre, $correo, $password, $id){
     $conn->close(); 
 }
 
-/*
+
 function ModificarPasswordBD($token, $password){
     $conn = new mysqli('localhost', 'agarcia', 'agarcia', 'agarcia_P5');
     if ($conn->connect_error) {
@@ -146,7 +146,7 @@ function ModificarPasswordBD($token, $password){
     $resultado->free();
     $conn->close(); 
 }
-*/
+
 
 
 

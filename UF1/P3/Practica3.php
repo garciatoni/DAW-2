@@ -32,6 +32,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     <div style="margin: 30px 10%;">
     <h3>My form</h3>
+    
     <form action="Practica3.php" enctype="multipart/form-data" method="post" id="myform" name="myform">
     
         <label>Text</label> <input type="text" value="" size="30" maxlength="100" name="mytext" id="" /><br /><br />
