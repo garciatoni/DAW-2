@@ -1,0 +1,2 @@
+<div>    Name: {{ $name }}</div>
+
